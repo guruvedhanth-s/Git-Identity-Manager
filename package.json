@@ -1,0 +1,32 @@
+{
+  "name": "git-identity-manager",
+  "version": "1.0.0",
+  "description": "CLI tool to manage multiple Git identities with automatic GitHub SSH key setup. Use regular git commands with --profile flag.",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "identity",
+    "profile",
+    "ssh",
+    "github",
+    "multi-account",
+    "cli",
+    "authentication"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guruvedhanth-s/Git-Identity-Manager"
+  },
+  "workspaces": [
+    "git-id-cli"
+  ],
+  "scripts": {
+    "install:cli": "cd git-id-cli && npm install",
+    "build:cli": "cd git-id-cli && npm run build",
+    "link:cli": "cd git-id-cli && npm link",
+    "setup": "npm run install:cli && npm run build:cli && npm run link:cli"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

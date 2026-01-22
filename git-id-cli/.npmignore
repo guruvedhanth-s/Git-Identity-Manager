@@ -1,0 +1,37 @@
+# Source files
+src/
+tsconfig.json
+
+# Development files
+*.ts
+!*.d.ts
+
+# Tests
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Development dependencies
+node_modules/
+
+# Build artifacts (keep dist/)
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation (will be included from root)
+# Keep README.md and LICENSE

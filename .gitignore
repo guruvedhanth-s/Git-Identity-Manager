@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+git-id-cli/dist/
+git-id-cli/node_modules/
+git-id-cli/package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Backup files
+*.bak
+*.backup
+
+# Test files
+coverage/
+.nyc_output/
+
+# Environment
+.env
+.env.local

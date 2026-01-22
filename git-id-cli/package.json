@@ -1,0 +1,64 @@
+{
+  "name": "@guruvedhanth-s/git-id",
+  "version": "1.0.0",
+  "description": "CLI tool to manage multiple Git identities with automatic GitHub SSH key setup. Use regular git commands with --profile flag.",
+  "main": "dist/index.js",
+  "bin": {
+    "git-id": "./dist/index.js",
+    "gid": "./dist/index.js",
+    "git-profile": "./dist/git-wrapper.js",
+    "gitp": "./dist/git-wrapper.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "git",
+    "identity",
+    "profile",
+    "ssh",
+    "github",
+    "cli",
+    "multi-account",
+    "git-profile",
+    "git-identity",
+    "multiple-accounts",
+    "ssh-keys"
+  ],
+  "author": "Guruvedhanth S <guruvedhanths@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/guruvedhanth-s/Git-Identity-Manager#readme",
+  "bugs": {
+    "url": "https://github.com/guruvedhanth-s/Git-Identity-Manager/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guruvedhanth-s/Git-Identity-Manager.git",
+    "directory": "git-id-cli"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "inquirer": "^8.2.6",
+    "open": "^8.4.2",
+    "ora": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^8.2.10",
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.2"
+  }
+}
