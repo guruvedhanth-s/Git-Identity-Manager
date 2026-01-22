@@ -1,6 +1,6 @@
 {
   "name": "@guruvedhanth-s/git-id",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "CLI tool to manage multiple Git identities with automatic GitHub SSH key setup. Use regular git commands with --profile flag.",
   "main": "dist/index.js",
   "bin": {
