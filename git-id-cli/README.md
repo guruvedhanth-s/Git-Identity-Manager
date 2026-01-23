@@ -1,4 +1,6 @@
-# Git Identity Manager
+# Git Identity Manager - CLI Tool
+
+> Development README for the Git Identity Manager CLI package
 
 A CLI tool to manage multiple Git identities with automatic GitHub SSH key setup. Use the regular `git` command with `--profile` flag to work with different GitHub accounts.
 
@@ -8,42 +10,58 @@ A CLI tool to manage multiple Git identities with automatic GitHub SSH key setup
 - **Multiple Git Profiles** - Create and switch between different Git identities  
 - **GitHub OAuth Integration** - Sign in with GitHub to auto-configure everything
 - **Automatic SSH Key Management** - Generates and uploads SSH keys to GitHub
+- **Automatic Shell Configuration** - Sets up `--profile` support on installation
 - **Profile-based Cloning** - Clone repos with the correct identity automatically
 
 ---
 
-## Installation
+## For Users
+
+### Installation from npm
+
+```bash
+npm i -g @guruvedhanth-s/git-id
+```
+
+**That's it!** Shell configuration is automatic.
+
+For complete documentation, see:
+- [Main README](../README.md) - Package overview and quick start
+- [DOCUMENTATION](../DOCUMENTATION.md) - Complete usage guide
+
+---
+
+## For Developers
+
+### Setup Development Environment
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/git-id-cli.git
+git clone https://github.com/guruvedhanth-s/Git-Identity-Manager.git
+cd Git-Identity-Manager/git-id-cli
 
-# Install dependencies and build
-cd git-id-cli
+# Install dependencies
 npm install
 
-# Link globally
+# Build TypeScript
+npm run build
+
+# Link globally for testing
 npm link
 ```
 
-### Enable `git --profile` Support
-
-Add this to your `~/.bashrc` (for Git Bash on Windows) or `~/.zshrc` (for Mac/Linux):
+### Development Workflow
 
 ```bash
-# Git Identity Manager - enables 'git --profile' support
-git() {
-    if [[ " $* " == *" --profile "* ]] || [[ " $* " == *" -p "* ]]; then
-        gitp "$@"
-    else
-        command git "$@"
-    fi
-}
-```
+# Build after changes
+npm run build
 
-Then reload your shell:
-```bash
-source ~/.bashrc
+# Run in development mode
+npm run dev
+
+# Test the CLI
+git-id --version
+git-id list
 ```
 
 ---
@@ -52,200 +70,292 @@ source ~/.bashrc
 
 ```bash
 # Create a profile with GitHub sign-in
-git id add --github
+git-id add --github
 
 # List your profiles  
-git id list
+git-id list
 
 # Clone with a profile
-git clone https://github.com/user/repo.git --profile Work
+git clone https://github.com/user/repo.git --profile work
 
 # Check current identity
-git id current
+git-id current
 ```
 
 ---
 
-## Commands
+## Commands Overview
 
 ### Using `--profile` with Git
 
-Add `--profile <name>` to any git command to use a specific identity:
+Add `--profile <name>` to any git command:
 
 ```bash
 # Clone with profile
-git clone https://github.com/company/project.git --profile Work
-git clone https://github.com/personal/repo.git --profile Personal
+git clone https://github.com/company/project.git --profile work
+git clone https://github.com/personal/repo.git --profile personal
 
 # Push with profile
-git push origin main --profile Work
+git push origin main --profile work
 
 # Pull with profile  
-git pull --profile Personal
+git pull --profile personal
 
-# Fetch with profile
-git fetch --profile Hex
+# Any git command works!
+git fetch --profile work
+git commit -m "message" --profile personal
 ```
 
-### Profile Management (`git id`)
+### Profile Management Commands
 
 ```bash
 # List all profiles
-git id list
+git-id list
 
 # Create new profile (with GitHub sign-in)
-git id add --github
+git-id add --github
 
 # Create new profile (manual)
-git id add --manual
+git-id add --manual
 
 # Switch profile in current repo
-git id use Work
-git id use Personal --global  # Apply globally
+git-id use work
+git-id use personal --global  # Apply globally
 
 # Show current identity
-git id current
+git-id current
 
 # Test SSH connection
-git id test Work
+git-id test work
 
 # Delete a profile
-git id delete OldProfile
-git id delete --all  # Delete all
+git-id delete oldprofile
+git-id delete --all  # Delete all profiles
 ```
 
 ---
 
-## Your Current Setup
+## Usage Examples
 
-| Profile | User | Email | GitHub |
-|---------|------|-------|--------|
-| Personal | guruvedhanth-s | guruvedhanths@gmail.com | guruvedhanth-s |
-| Hex | guruvedhanths | Guruvedhanth.Suresh@hexstream.com | guruvedhanths |
-
-### SSH Host Aliases
+### Create and Use Profiles
 
 ```bash
-# Clone using Personal account
-git clone git@github-Personal:guruvedhanth-s/repo.git
+# Create work profile
+git-id add --github
+→ Name: work
+→ Sign in with work GitHub account
 
-# Clone using Hex account  
-git clone git@github-Hex:guruvedhanths/repo.git
-```
+# Create personal profile
+git-id add --github
+→ Name: personal  
+→ Sign in with personal GitHub account
 
----
+# Clone work repository
+git clone https://github.com/company/project.git --profile work
+cd project
+git-id current  # Verify: Profile: work
 
-## Examples
-
-### Clone a Work Project
-
-```bash
-git clone https://github.com/HEXstreamAnalytics/utility360v2.git --profile Hex
-cd utility360v2
-git id current  # Shows: Profile: Hex
-```
-
-### Clone a Personal Project
-
-```bash
-git clone https://github.com/guruvedhanth-s/my-project.git --profile Personal
+# Clone personal repository
+git clone https://github.com/username/my-project.git --profile personal
 cd my-project
-git id current  # Shows: Profile: Personal
+git-id current  # Verify: Profile: personal
 ```
 
 ### Switch Profile in Existing Repo
 
 ```bash
 cd existing-repo
-git id current        # Check current
-git id use Hex        # Switch to Hex
-git config user.email # Verify: Guruvedhanth.Suresh@hexstream.com
+
+# Check current identity
+git-id current
+
+# Switch to different profile
+git-id use work
+
+# Verify
+git config user.email  # Shows work email
 ```
 
-### Push with Different Profile
+### Work with Multiple Accounts
 
 ```bash
-cd some-repo
-git add .
-git commit -m "feature: add something"
-git push --profile Hex  # Uses Hex SSH key
+# Setup profiles for each account
+git-id add --github  # work
+git-id add --github  # personal
+git-id add --github  # client
+
+# Use different profiles for different repos
+git clone git@github.com:company/repo.git --profile work
+git clone git@github.com:username/project.git --profile personal
+git clone git@github.com:client/app.git --profile client
+
+# Each repo automatically uses the correct identity and SSH key
 ```
 
-### Create a New Profile
+---
+
+## Project Structure
+
+```
+git-id-cli/
+├── src/
+│   ├── index.ts              # Main CLI entry point
+│   ├── profile-manager.ts    # Profile CRUD operations
+│   ├── github-auth.ts        # GitHub OAuth flow
+│   ├── ssh-manager.ts        # SSH key generation & upload
+│   ├── git-config.ts         # Git configuration management
+│   ├── git-wrapper.ts        # Git command wrapper for --profile
+│   ├── prompts.ts            # CLI prompts
+│   └── types.ts              # TypeScript types
+├── scripts/
+│   └── postinstall.js        # Automatic shell configuration
+├── dist/                     # Compiled JavaScript (generated)
+├── package.json
+├── tsconfig.json
+└── README.md                 # This file
+```
+
+---
+
+## How It Works
+
+### Profile Storage
+
+Profiles are stored in `~/.git-id/profiles.json`:
+
+```json
+{
+  "work": {
+    "name": "John Doe",
+    "email": "john@company.com",
+    "github": "john-work",
+    "sshKey": "~/.ssh/id_ed25519_work",
+    "signingKey": null
+  }
+}
+```
+
+### SSH Key Management
+
+- **Key Generation:** ED25519 keys are generated per profile
+- **Key Location:** `~/.ssh/id_ed25519_<profile>`
+- **SSH Config:** Auto-configured in `~/.ssh/config` with host aliases
+- **GitHub Upload:** Public keys uploaded via OAuth during profile creation
+
+### Git Configuration
+
+When you use a profile, these Git configs are set:
 
 ```bash
-git id add --github
-# Enter name: Client
-# Browser opens -> Sign in with client's GitHub
-# SSH key auto-generated and uploaded
-# Done!
-
-git id list  # Shows new profile
+git config --local user.name "John Doe"
+git config --local user.email "john@company.com"
+git config --local core.sshCommand "ssh -i ~/.ssh/id_ed25519_work"
 ```
+
+### Shell Integration
+
+The postinstall script adds this function to your shell:
+
+```bash
+git() {
+    if [[ " $* " == *" --profile "* ]]; then
+        gitp "$@"
+    else
+        command git "$@"
+    fi
+}
+```
+
+This intercepts `git --profile` commands and routes them through the CLI tool.
 
 ---
 
 ## File Locations
 
-| File | Location | Description |
-|------|----------|-------------|
-| Profiles | `~/.git-id/profiles.json` | Your saved profiles |
-| SSH Keys | `~/.ssh/id_ed25519_<profile>` | SSH keys per profile |
-| SSH Config | `~/.ssh/config` | SSH host aliases |
+| What | Location |
+|------|----------|
+| **Profiles** | `~/.git-id/profiles.json` |
+| **SSH Keys** | `~/.ssh/id_ed25519_<profile>` |
+| **SSH Config** | `~/.ssh/config` |
+| **Shell Config** | `~/.bashrc` or `~/.zshrc` |
 
 ---
 
-## Troubleshooting
-
-### Command not found: gitp
+## Development Commands
 
 ```bash
-# Re-link the CLI
-cd ~/Work/Git\ Extension/git-id-cli
+# Install dependencies
+npm install
+
+# Build TypeScript
+npm run build
+
+# Run in dev mode (with ts-node)
+npm run dev
+
+# Link globally for testing
 npm link
+
+# Unlink
+npm unlink -g
+
+# Test the build
+npm pack  # Creates tarball to inspect
+
+# Publish to npm (with build)
+npm publish
 ```
 
-### --profile not working
+---
 
-Make sure you added the function to `~/.bashrc` and reloaded:
+## Troubleshooting Development Issues
+
+### TypeScript Errors
 
 ```bash
+# Clean and rebuild
+rm -rf dist/
+npm run build
+```
+
+### Testing Locally
+
+```bash
+# Link the package
+npm link
+
+# Test commands
+git-id --version
+git-id list
+git-id add --github
+
+# Unlink when done
+npm unlink -g
+```
+
+### Shell Function Not Working
+
+```bash
+# Check if linked
+which git-id
+which gitp
+
+# Reload shell config
 source ~/.bashrc
+
+# Test function
 type git  # Should show "git is a function"
 ```
 
-### SSH Connection Failed
-
-```bash
-# Test SSH
-git id test Hex
-
-# Manual test
-ssh -T git@github-Hex
-```
-
-### Wrong Identity After Clone
-
-```bash
-cd cloned-repo
-git id use CorrectProfile
-```
-
 ---
 
-## Command Summary
+## Contributing
 
-| Command | Description |
-|---------|-------------|
-| `git clone <url> --profile <name>` | Clone with specific profile |
-| `git push --profile <name>` | Push with specific profile |
-| `git pull --profile <name>` | Pull with specific profile |
-| `git id list` | List all profiles |
-| `git id add --github` | Create profile with GitHub |
-| `git id use <name>` | Switch profile in current repo |
-| `git id current` | Show current identity |
-| `git id test <name>` | Test SSH connection |
-| `git id delete <name>` | Delete a profile |
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
 
 ---
 
